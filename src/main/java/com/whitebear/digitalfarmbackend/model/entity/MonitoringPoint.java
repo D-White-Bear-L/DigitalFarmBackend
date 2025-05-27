@@ -24,17 +24,17 @@ public class MonitoringPoint {
     private LocalDateTime updateTime;
 
     @Override
-    public String toString(){
-        return "MonitoringPoint{"+
-                "pointId="+pointId+
-                "baseId="+baseId+
-                "pointName="+pointName+
-                "location="+location+
-                "imgUrl="+imgUrl+
-                "longitude="+longitude+
-                "latitude="+latitude+
-                "createTime="+createTime+
-                "updateTime="+updateTime+
+    public String toString() {
+        return "MonitoringPoint{" +
+                "pointId=" + pointId +
+                ", baseId=" + baseId +
+                ", pointName='" + pointName + '\'' +
+                ", location='" + location + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }
