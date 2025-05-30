@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -23,7 +24,7 @@ public class MonitoringPoint {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
-//    @TableField(exist = false) // 表示该字段不是数据库中的字段，只用于映射
+    @TableField(exist = false) // 表示该字段不是数据库中的字段，只用于映射
     private String baseName;
 
     public Integer getPointId() {
