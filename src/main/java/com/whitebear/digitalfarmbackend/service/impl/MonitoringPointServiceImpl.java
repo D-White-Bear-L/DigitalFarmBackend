@@ -2,6 +2,7 @@ package com.whitebear.digitalfarmbackend.service.impl;
 
 import com.whitebear.digitalfarmbackend.mapper.FarmBaseMapper;
 import com.whitebear.digitalfarmbackend.mapper.MonitoringPointMapper;
+import com.whitebear.digitalfarmbackend.model.dto.MPPageResult;
 import com.whitebear.digitalfarmbackend.model.dto.MonitoringPointDTO;
 import com.whitebear.digitalfarmbackend.model.entity.FarmBase;
 import com.whitebear.digitalfarmbackend.model.entity.MonitoringPoint;
@@ -46,21 +47,42 @@ public class MonitoringPointServiceImpl implements MonitoringPointService {
      * @return 符合条件的监测点DTO列表
      */
     @Override
-    public List<MonitoringPointDTO> getMonitoringPointsByConditions(String baseId, String keyword) {
-        List<MonitoringPoint> monitoringPoints;
-        if(baseId != null && !baseId.isEmpty() && keyword != null && !keyword.isEmpty()){ // 基地ID和关键字都非空
-            monitoringPoints = monitoringPointMapper.selectMonitoringPointsByBaseIdAndKeyword(Integer.parseInt(baseId), keyword);
+//    public List<MonitoringPointDTO> getMonitoringPointsByConditions(String baseId, String keyword, int pageNum, int pageSize) {
+//        List<MonitoringPoint> monitoringPoints;
+//        if(baseId != null && !baseId.isEmpty() && keyword != null && !keyword.isEmpty()){ // 基地ID和关键字都非空
+//            monitoringPoints = monitoringPointMapper.selectMonitoringPointsByBaseIdAndKeyword(Integer.parseInt(baseId), keyword);
+//        }
+//        else if(baseId != null && !baseId.isEmpty()){ // 基地ID非空，返回基地ID下的
+//            monitoringPoints = monitoringPointMapper.selectMonitoringPointsByBaseId(Integer.parseInt(baseId));
+//        }
+//        else if(keyword != null && !keyword.isEmpty()){ // 仅关键字非空，返回检索关键字的
+//            monitoringPoints = monitoringPointMapper.selectMonitoringPointsByKeyword(keyword);
+//        }
+//        else{ // 都为空返回所有
+//            monitoringPoints = monitoringPointMapper.selectAllMonitoringPoints();
+//        }
+//        return convertToDTO(monitoringPoints);
+//    }
+    public MPPageResult<MonitoringPointDTO> getMonitoringPointsByConditions(
+            String baseId, String keyword, int pageNum, int pageSize) {
+
+        // 参数校验
+        if (pageNum <= 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("分页参数必须大于0");
         }
-        else if(baseId != null && !baseId.isEmpty()){ // 基地ID非空，返回基地ID下的
-            monitoringPoints = monitoringPointMapper.selectMonitoringPointsByBaseId(Integer.parseInt(baseId));
-        }
-        else if(keyword != null && !keyword.isEmpty()){ // 仅关键字非空，返回检索关键字的
-            monitoringPoints = monitoringPointMapper.selectMonitoringPointsByKeyword(keyword);
-        }
-        else{ // 都为空返回所有
-            monitoringPoints = monitoringPointMapper.selectAllMonitoringPoints();
-        }
-        return convertToDTO(monitoringPoints);
+
+        // 计算起始位置（LIMIT offset, size）
+        int offset = (pageNum - 1) * pageSize;
+
+        // 查询当前页数据
+        List<MonitoringPoint> list = monitoringPointMapper.selectByConditions(baseId, keyword, offset, pageSize);
+
+        List<MonitoringPointDTO> listDTO = convertToDTO(list);
+        // 查询总记录数
+        long total = monitoringPointMapper.countByConditions(baseId, keyword);
+
+        // 返回分页结果
+        return new MPPageResult<>(listDTO, total, pageNum, pageSize);
     }
 
     @Override

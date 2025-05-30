@@ -2,6 +2,7 @@ package com.whitebear.digitalfarmbackend.mapper;
 
 import com.whitebear.digitalfarmbackend.model.entity.MonitoringPoint;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -39,4 +40,42 @@ public interface MonitoringPointMapper {
             "LEFT JOIN Base b ON mp.base_id = b.base_id " +
             "WHERE b.base_id = #{baseId} AND mp.point_name LIKE CONCAT('%', #{keyword}, '%')")
     List<MonitoringPoint> selectMonitoringPointsByBaseIdAndKeyword(Integer baseId, String keyword);
+
+    // 结合分页查询
+    @Select({
+            "<script>",
+            "SELECT mp.point_id, mp.base_id, mp.point_name, mp.location, mp.image_url,",
+            "mp.longitude, mp.latitude, mp.create_time, mp.update_time, b.base_name",
+            "FROM MonitoringPoint mp",
+            "LEFT JOIN Base b ON mp.base_id = b.base_id",
+            "<where>",
+            "  <if test='baseId != null'> AND b.base_id = #{baseId} </if>",
+            "  <if test='keyword != null'> AND mp.point_name LIKE CONCAT('%', #{keyword}, '%') </if>",
+            "</where>",
+            "LIMIT #{offset}, #{pageSize}",
+            "</script>"
+    })
+    List<MonitoringPoint> selectByConditions(
+            @Param("baseId") String baseId,
+            @Param("keyword") String keyword,
+            @Param("offset") int offset,
+            @Param("pageSize") int pageSize
+    );
+
+    @Select({
+            "<script>",
+            "SELECT COUNT(*) FROM MonitoringPoint mp",
+            "LEFT JOIN Base b ON mp.base_id = b.base_id",
+            "<where>",
+            "  <if test='baseId != null'> AND b.base_id = #{baseId} </if>",
+            "  <if test='keyword != null'> AND mp.point_name LIKE CONCAT('%', #{keyword}, '%') </if>",
+            "</where>",
+            "</script>"
+    })
+    long countByConditions(
+            @Param("baseId") String baseId,
+            @Param("keyword") String keyword
+    );
+
+
 }

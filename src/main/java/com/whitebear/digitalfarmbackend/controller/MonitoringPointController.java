@@ -1,5 +1,6 @@
 package com.whitebear.digitalfarmbackend.controller;
 
+import com.whitebear.digitalfarmbackend.model.dto.MPPageResult;
 import com.whitebear.digitalfarmbackend.model.dto.MonitoringPointDTO;
 import com.whitebear.digitalfarmbackend.service.MonitoringPointService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +24,18 @@ public class MonitoringPointController {
             @RequestParam(required = false) //  参数名
             String baseId,
             @RequestParam(required = false)
-            String keyword
+            String keyword,
+            @RequestParam(defaultValue = "1") int pageNum,
+            @RequestParam(defaultValue = "10") int pageSize
     ){
-        List<MonitoringPointDTO> monitoringPoints = monitoringPointService.getMonitoringPointsByConditions(baseId, keyword);
+        MPPageResult<MonitoringPointDTO> resultData = monitoringPointService.getMonitoringPointsByConditions(baseId, keyword,pageNum,pageSize);
         // 返回结果
-        Map<String, Object> result = new HashMap<>();
-        result.put("code", 200);
-        result.put("message", "获取检测点列表成功");
-        result.put("data", monitoringPoints);
-        System.out.println(result);
-        return result;
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", 200);
+        response.put("message", "获取检测点列表成功");
+        response.put("data", resultData);
+        System.out.println(response);
+        return response;
     }
 
     @GetMapping("/base-options")
