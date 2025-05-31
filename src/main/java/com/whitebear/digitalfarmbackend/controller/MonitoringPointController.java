@@ -4,10 +4,7 @@ import com.whitebear.digitalfarmbackend.model.dto.MPPageResult;
 import com.whitebear.digitalfarmbackend.model.dto.MonitoringPointDTO;
 import com.whitebear.digitalfarmbackend.service.MonitoringPointService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,12 +17,10 @@ public class MonitoringPointController {
     private MonitoringPointService monitoringPointService;
     @GetMapping("/list")
     public Map<String,Object> getAllMonitoringPoints(
-            // 两个参数都为空
-            @RequestParam(required = false) //  参数名
-            String baseId,
-            @RequestParam(required = false)
-            String keyword,
-            @RequestParam(defaultValue = "1") int pageNum,
+            // 两个参数都可以为空
+            @RequestParam(required = false) String baseId,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") int pageNum, // 当前页码
             @RequestParam(defaultValue = "10") int pageSize
     ){
         MPPageResult<MonitoringPointDTO> resultData = monitoringPointService.getMonitoringPointsByConditions(baseId, keyword,pageNum,pageSize);
@@ -34,7 +29,7 @@ public class MonitoringPointController {
         response.put("code", 200);
         response.put("message", "获取检测点列表成功");
         response.put("data", resultData);
-        System.out.println(response);
+        System.out.println("listResponse:"+response);
         return response;
     }
 
@@ -45,6 +40,54 @@ public class MonitoringPointController {
         result.put("code", 200);
         result.put("message", "获取基地选项成功");
         result.put("data", options);
+
+        return result;
+    }
+
+    @PostMapping("/add")
+    public Map<String, Object> addMonitoringPoint(@RequestBody MonitoringPointDTO monitoringPointDTO) {
+        boolean success = monitoringPointService.addMonitoringPoint(monitoringPointDTO);
+
+        Map<String, Object> result = new HashMap<>();
+        if (success) {
+            result.put("code", 200);
+            result.put("message", "添加监测点成功");
+        } else {
+            result.put("code", 500);
+            result.put("message", "添加监测点失败");
+        }
+
+        return result;
+    }
+
+    @PutMapping("/update")
+    public Map<String, Object> updateMonitoringPoint(@RequestBody MonitoringPointDTO monitoringPointDTO) {
+        boolean success = monitoringPointService.updateMonitoringPoint(monitoringPointDTO);
+
+        Map<String, Object> result = new HashMap<>();
+        if (success) {
+            result.put("code", 200);
+            result.put("message", "更新监测点成功");
+        } else {
+            result.put("code", 500);
+            result.put("message", "更新监测点失败");
+        }
+
+        return result;
+    }
+
+    @DeleteMapping("/delete/{pointId}")
+    public Map<String, Object> deleteMonitoringPoint(@PathVariable Integer pointId) {
+        boolean success = monitoringPointService.deleteMonitoringPoint(pointId);
+
+        Map<String, Object> result = new HashMap<>();
+        if (success) {
+            result.put("code", 200);
+            result.put("message", "删除监测点成功");
+        } else {
+            result.put("code", 500);
+            result.put("message", "删除监测点失败");
+        }
 
         return result;
     }

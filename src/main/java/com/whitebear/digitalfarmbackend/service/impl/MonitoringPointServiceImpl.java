@@ -1,5 +1,14 @@
 package com.whitebear.digitalfarmbackend.service.impl;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.whitebear.digitalfarmbackend.mapper.FarmBaseMapper;
 import com.whitebear.digitalfarmbackend.mapper.MonitoringPointMapper;
 import com.whitebear.digitalfarmbackend.model.dto.MPPageResult;
@@ -7,17 +16,13 @@ import com.whitebear.digitalfarmbackend.model.dto.MonitoringPointDTO;
 import com.whitebear.digitalfarmbackend.model.entity.FarmBase;
 import com.whitebear.digitalfarmbackend.model.entity.MonitoringPoint;
 import com.whitebear.digitalfarmbackend.service.MonitoringPointService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 @Service
 public class MonitoringPointServiceImpl implements MonitoringPointService {
 
+    @Autowired
     private final MonitoringPointMapper monitoringPointMapper;
+    @Autowired
     private final FarmBaseMapper farmBaseMapper;
 
     public MonitoringPointServiceImpl(MonitoringPointMapper monitoringPointMapper, FarmBaseMapper farmBaseMapper) {
@@ -47,24 +52,7 @@ public class MonitoringPointServiceImpl implements MonitoringPointService {
      * @return 符合条件的监测点DTO列表
      */
     @Override
-//    public List<MonitoringPointDTO> getMonitoringPointsByConditions(String baseId, String keyword, int pageNum, int pageSize) {
-//        List<MonitoringPoint> monitoringPoints;
-//        if(baseId != null && !baseId.isEmpty() && keyword != null && !keyword.isEmpty()){ // 基地ID和关键字都非空
-//            monitoringPoints = monitoringPointMapper.selectMonitoringPointsByBaseIdAndKeyword(Integer.parseInt(baseId), keyword);
-//        }
-//        else if(baseId != null && !baseId.isEmpty()){ // 基地ID非空，返回基地ID下的
-//            monitoringPoints = monitoringPointMapper.selectMonitoringPointsByBaseId(Integer.parseInt(baseId));
-//        }
-//        else if(keyword != null && !keyword.isEmpty()){ // 仅关键字非空，返回检索关键字的
-//            monitoringPoints = monitoringPointMapper.selectMonitoringPointsByKeyword(keyword);
-//        }
-//        else{ // 都为空返回所有
-//            monitoringPoints = monitoringPointMapper.selectAllMonitoringPoints();
-//        }
-//        return convertToDTO(monitoringPoints);
-//    }
-    public MPPageResult<MonitoringPointDTO> getMonitoringPointsByConditions(
-            String baseId, String keyword, int pageNum, int pageSize) {
+    public MPPageResult<MonitoringPointDTO> getMonitoringPointsByConditions(String baseId, String keyword, int pageNum, int pageSize) {
 
         // 参数校验
         if (pageNum <= 0 || pageSize <= 0) {
@@ -98,6 +86,36 @@ public class MonitoringPointServiceImpl implements MonitoringPointService {
         });
         return options;
     }
+
+    @Override
+    public boolean addMonitoringPoint(MonitoringPointDTO monitoringPointDTO) {
+        MonitoringPoint monitoringPoint = new MonitoringPoint();
+        monitoringPoint.setBaseId(monitoringPointDTO.getBaseId());
+        monitoringPoint.setPointName(monitoringPointDTO.getPointName());
+        monitoringPoint.setLocation(monitoringPointDTO.getLocation());
+        monitoringPoint.setImageUrl(monitoringPointDTO.getImageUrl());
+
+        return monitoringPointMapper.insertMonitoringPoint(monitoringPoint) > 0;
+    }
+
+    @Override
+    public boolean updateMonitoringPoint(MonitoringPointDTO monitoringPointDTO) {
+        MonitoringPoint monitoringPoint = new MonitoringPoint();
+        monitoringPoint.setPointId(monitoringPointDTO.getPointId());
+        monitoringPoint.setBaseId(monitoringPointDTO.getBaseId());
+        monitoringPoint.setPointName(monitoringPointDTO.getPointName());
+        monitoringPoint.setLocation(monitoringPointDTO.getLocation());
+        monitoringPoint.setImageUrl(monitoringPointDTO.getImageUrl());
+
+        return monitoringPointMapper.updateMonitoringPoint(monitoringPoint) > 0;
+    }
+
+    @Override
+    public boolean deleteMonitoringPoint(Integer pointId) {
+        return monitoringPointMapper.deleteMonitoringPoint(pointId) > 0;
+    }
+
+
     private List<MonitoringPointDTO> convertToDTO(List<MonitoringPoint> monitoringPoints){
         List<MonitoringPointDTO> dtoList = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -109,7 +127,7 @@ public class MonitoringPointServiceImpl implements MonitoringPointService {
             dto.setBaseName(point.getBaseName()); // 设置baseName基地名称
             dto.setPointName(point.getPointName()); //  设置pointName检测点名称
             dto.setLocation(point.getLocation()); //  设置location
-            dto.setImgUrl(point.getImageUrl()); // 图片
+            dto.setImageUrl(point.getImageUrl()); // 图片
             
             // Format LocalDateTime using DateTimeFormatter
             if (point.getCreateTime() != null) {

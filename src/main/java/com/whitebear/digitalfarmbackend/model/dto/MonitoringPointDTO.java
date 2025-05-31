@@ -5,10 +5,12 @@ import lombok.Data;
 
 @Data
 public class MonitoringPointDTO {
+    private Integer baseId;
     private Integer pointId; // 监控点id
     private String baseName; // 基地名称
     private String pointName; // 监控点名称
     private String location; // 监控点位置
-    private String imgUrl; // 监控点图片
+    private String imageUrl; // 监控点图片
     public String createTime; //  创建时间: yyyy-MM-dd HH:mm:ss 传输直接用字符串
+
 }

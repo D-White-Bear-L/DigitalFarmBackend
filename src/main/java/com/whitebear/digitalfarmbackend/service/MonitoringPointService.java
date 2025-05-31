@@ -13,4 +13,10 @@ public interface MonitoringPointService {
     MPPageResult<MonitoringPointDTO> getMonitoringPointsByConditions(String baseId, String keyword, int pageNum, int pageSize);
     // 获取基地选项
     List<Map<String, Object>> getBaseOptions();
+    // 添加监控点
+    boolean addMonitoringPoint(MonitoringPointDTO monitoringPointDTO);
+    // 修改监控点
+    boolean updateMonitoringPoint(MonitoringPointDTO monitoringPointDTO);
+    // 删除监控点
+    boolean deleteMonitoringPoint(Integer pointId);
 }

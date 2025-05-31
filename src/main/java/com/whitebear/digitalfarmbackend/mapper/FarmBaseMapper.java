@@ -16,4 +16,7 @@ public interface FarmBaseMapper extends BaseMapper<FarmBase> {
 
     @Select("SELECT base_id,base_name FROM Base")
     List<FarmBase> selectBaseOptions();
+
+    @Select("SELECT * FROM Base WHERE base_name = #{baseName} LIMIT 1")
+    FarmBase  selectByBaseName(String baseName);
 }

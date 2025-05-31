@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class MPPageResult<T> {
-    private List<T> list;
+    private List<T> list; // 分页结果，使用泛型
     private long total;
     private int pageNum;
     private int pageSize;
