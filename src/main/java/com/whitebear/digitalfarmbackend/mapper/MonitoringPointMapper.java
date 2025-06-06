@@ -1,9 +1,16 @@
 package com.whitebear.digitalfarmbackend.mapper;
 
-import com.whitebear.digitalfarmbackend.model.entity.MonitoringPoint;
-import org.apache.ibatis.annotations.*;
-
 import java.util.List;
+
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import com.whitebear.digitalfarmbackend.model.entity.MonitoringPoint;
 
 @Mapper
 public interface MonitoringPointMapper {
@@ -54,14 +61,15 @@ public interface MonitoringPointMapper {
 
 
     // 添加监测点
-    @Insert("INSERT INTO MonitoringPoint(base_id, point_name, location, image_url, create_time, update_time) " +
-            "VALUES(#{baseId}, #{pointName}, #{location}, #{imageUrl}, #{createTime}, #{updateTime})")
+    @Insert("INSERT INTO MonitoringPoint(base_id, point_name, location, image_url, longitude, latitude, create_time, update_time) " +
+            "VALUES(#{baseId}, #{pointName}, #{location}, #{imageUrl}, #{longitude}, #{latitude}, #{createTime}, #{updateTime})")
     @Options(useGeneratedKeys = true, keyProperty = "pointId")
     int insertMonitoringPoint(MonitoringPoint monitoringPoint);
 
     // 更新监测点
     @Update("UPDATE MonitoringPoint SET base_id = #{baseId}, point_name = #{pointName}, " +
-            "location = #{location}, image_url = #{imageUrl}, update_time = #{updateTime} " +
+            "location = #{location}, image_url = #{imageUrl}, longitude = #{longitude}, " +
+            "latitude = #{latitude}, update_time = #{updateTime} " +
             "WHERE point_id = #{pointId}")
     int updateMonitoringPoint(MonitoringPoint monitoringPoint);
 

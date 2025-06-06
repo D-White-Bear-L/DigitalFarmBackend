@@ -14,6 +14,7 @@ public class corsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // 对所有接口开启 CORS 支持
                         .allowedOrigins("http://10.12.134.178:3000") // 允许指定的前端域名访问
+                        .allowedOrigins("http://localhost:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE") // 支持的方法
                         .allowedHeaders("*"); // 支持所有请求头
             }

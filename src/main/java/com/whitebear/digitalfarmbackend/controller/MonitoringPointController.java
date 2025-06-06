@@ -1,6 +1,6 @@
 package com.whitebear.digitalfarmbackend.controller;
 
-import com.whitebear.digitalfarmbackend.model.dto.MPPageResult;
+import com.whitebear.digitalfarmbackend.model.dto.PageResult;
 import com.whitebear.digitalfarmbackend.model.dto.MonitoringPointDTO;
 import com.whitebear.digitalfarmbackend.service.MonitoringPointService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class MonitoringPointController {
             @RequestParam(defaultValue = "1") int pageNum, // 当前页码
             @RequestParam(defaultValue = "10") int pageSize
     ){
-        MPPageResult<MonitoringPointDTO> resultData = monitoringPointService.getMonitoringPointsByConditions(baseId, keyword,pageNum,pageSize);
+        PageResult<MonitoringPointDTO> resultData = monitoringPointService.getMonitoringPointsByConditions(baseId, keyword,pageNum,pageSize);
         // 返回结果
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
@@ -46,8 +46,8 @@ public class MonitoringPointController {
 
     @PostMapping("/add")
     public Map<String, Object> addMonitoringPoint(@RequestBody MonitoringPointDTO monitoringPointDTO) {
-        boolean success = monitoringPointService.addMonitoringPoint(monitoringPointDTO);
-
+        boolean success = monitoringPointService.addMonitoringPoint(monitoringPointDTO); // 调用业务逻辑层方法
+        System.out.println("addMonitoringPoint:"+monitoringPointDTO);
         Map<String, Object> result = new HashMap<>();
         if (success) {
             result.put("code", 200);
@@ -64,6 +64,7 @@ public class MonitoringPointController {
     public Map<String, Object> updateMonitoringPoint(@RequestBody MonitoringPointDTO monitoringPointDTO) {
         boolean success = monitoringPointService.updateMonitoringPoint(monitoringPointDTO);
 
+         System.out.println("updateMonitoringPoint:"+monitoringPointDTO);
         Map<String, Object> result = new HashMap<>();
         if (success) {
             result.put("code", 200);
@@ -80,6 +81,7 @@ public class MonitoringPointController {
     public Map<String, Object> deleteMonitoringPoint(@PathVariable Integer pointId) {
         boolean success = monitoringPointService.deleteMonitoringPoint(pointId);
 
+         System.out.println("deleteMonitoringPoint:"+pointId);
         Map<String, Object> result = new HashMap<>();
         if (success) {
             result.put("code", 200);
