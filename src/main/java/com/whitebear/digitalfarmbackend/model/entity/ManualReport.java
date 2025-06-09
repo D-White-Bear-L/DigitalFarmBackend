@@ -1,2 +1,8 @@
-package com.whitebear.digitalfarmbackend.model.entity;public class ManualReport {
+package com.whitebear.digitalfarmbackend.model.entity;
+
+import lombok.Data;
+
+@Data
+public class ManualReport {
+
 }

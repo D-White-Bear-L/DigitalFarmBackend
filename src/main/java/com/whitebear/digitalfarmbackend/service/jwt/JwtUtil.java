@@ -1,45 +1,41 @@
-package com.whitebear.digitalfarmbackend.util;
+package com.whitebear.digitalfarmbackend.service.jwt;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import javax.crypto.SecretKey;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 public class JwtUtil {
-    private static final String SECRET_KEY = "your-256-bit-secret-your-256-bit-secret"; // 至少32位
+    private static final String SECRET_KEY = "your-256-bit-secret-your-256-bit-secret-123456"; // 必须32字节+
     private static final long EXPIRATION = 1000 * 60 * 60 * 24; // 1天
-
-    private static SecretKey getKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-    }
+    private static final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
     public static String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(getKey())
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public static String getUsernameFromToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getKey())
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
+        return claims.getSubject();
     }
 
     public static boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (Exception e) {
             return false;
         }
     }
