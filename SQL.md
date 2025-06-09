@@ -126,27 +126,32 @@ CREATE TABLE AlertRecord (
 ### 8. 用户表 (User)
 
 ```sql
-CREATE TABLE User (
-    user_id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) NOT NULL COMMENT '用户名',
-    password VARCHAR(255) NOT NULL COMMENT '密码',
-    real_name VARCHAR(50) COMMENT '真实姓名',
-    role ENUM('admin','manager','user') NOT NULL DEFAULT 'operator' COMMENT '角色',
-    avatar_url VARCHAR(255) COMMENT '用户头像URL',
-    gender ENUM('male','female','other') COMMENT '性别',
-    birthday DATE COMMENT '出生日期',
-    department VARCHAR(50) COMMENT '所属部门',
-    position VARCHAR(50) COMMENT '职位',
-    phone VARCHAR(20) COMMENT '联系电话',
-    email VARCHAR(100) COMMENT '邮箱',
-    address VARCHAR(200) COMMENT '地址',
-    bio TEXT COMMENT '个人简介',
-    last_login DATETIME COMMENT '最后登录时间',
-    login_ip VARCHAR(50) COMMENT '最后登录IP',
-    status ENUM('active','inactive','locked') NOT NULL DEFAULT 'active' COMMENT '账号状态',
-    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+CREATE TABLE IF NOT EXISTS `User` (
+  `user_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `username` VARCHAR(50) NOT NULL UNIQUE,
+  `password` VARCHAR(100) NOT NULL,
+  `real_name` VARCHAR(50),
+  `role` VARCHAR(20) NOT NULL DEFAULT 'user',
+  `avatar_url` VARCHAR(255),
+  `gender` VARCHAR(10),
+  `birthday` DATE,
+  `department` VARCHAR(50),
+  `position` VARCHAR(50),
+  `phone` VARCHAR(20),
+  `email` VARCHAR(100) UNIQUE,
+  `address` VARCHAR(255),
+  `bio` TEXT,
+  `last_login` DATETIME,
+  `login_ip` VARCHAR(50),
+  `status` VARCHAR(20) NOT NULL DEFAULT 'active',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+-- 创建索引
+CREATE INDEX idx_user_username ON `User` (`username`);
+CREATE INDEX idx_user_email ON `User` (`email`);
+CREATE INDEX idx_user_phone ON `User` (`phone`);
 ```
 
 ## 用户头像存储方案(后面可以改成OSS)

@@ -9,7 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 public class JwtUtil {
-    private static final String SECRET_KEY = "your-256-bit-secret-your-256-bit-secret-123456"; // 必须32字节+
+    private static final String SECRET_KEY = "a49020fd431f642f754204dac7397be8e72a7837a9fc2d587e880dc5212a3b45"; // 必须32字节+
     private static final long EXPIRATION = 1000 * 60 * 60 * 24; // 1天
     private static final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
