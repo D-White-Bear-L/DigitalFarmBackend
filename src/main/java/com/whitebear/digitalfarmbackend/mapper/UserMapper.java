@@ -1,10 +1,11 @@
 package com.whitebear.digitalfarmbackend.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.whitebear.digitalfarmbackend.model.entity.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
