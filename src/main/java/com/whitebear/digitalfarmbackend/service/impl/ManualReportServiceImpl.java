@@ -20,10 +20,10 @@ public class ManualReportServiceImpl implements ManualReportService {
     private ManualReportMapper manualReportMapper;
 
     @Override
-    public PageResult<ManualReportDTO> getList(Integer page, Integer size, Integer baseId, String pointName, String startDate, String endDate) {
+    public PageResult<ManualReportDTO> getList(Integer page, Integer size, Integer baseId, String pointName, String startDate, String endDate, String dataSource) {
         QueryWrapper<ManualReportDTO> wrapper = new QueryWrapper<>();
         if (baseId != null) {
-            wrapper.eq("base_id", baseId);
+            wrapper.eq("s.base_id", baseId);
         }
         if (pointName != null && !pointName.isEmpty()) {
             wrapper.like("soil_sample_name", pointName);
@@ -33,6 +33,9 @@ public class ManualReportServiceImpl implements ManualReportService {
         }
         if (endDate != null && !endDate.isEmpty()) {
             wrapper.le("sample_date", endDate);
+        }
+        if (dataSource != null && !dataSource.isEmpty()) {
+            wrapper.eq("data_source", dataSource);
         }
         wrapper.orderByDesc("sample_date");
         Page<ManualReportDTO> pageObj = new Page<>(page, size);
