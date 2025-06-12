@@ -3,7 +3,7 @@ package com.whitebear.digitalfarmbackend.service;
 import java.util.Map;
 
 import com.whitebear.digitalfarmbackend.model.dto.ManualReportDTO;
-import com.whitebear.digitalfarmbackend.model.dto.PageResult;
+import com.whitebear.digitalfarmbackend.model.vo.PageResult;
 
 public interface ManualReportService {
     PageResult<ManualReportDTO> getList(Integer page, Integer size, Integer baseId, String pointName, String startDate, String endDate, String dataSource);

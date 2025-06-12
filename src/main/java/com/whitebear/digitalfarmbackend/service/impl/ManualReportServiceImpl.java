@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.whitebear.digitalfarmbackend.mapper.ManualReportMapper;
 import com.whitebear.digitalfarmbackend.model.dto.ManualReportDTO;
-import com.whitebear.digitalfarmbackend.model.dto.PageResult;
+import com.whitebear.digitalfarmbackend.model.vo.PageResult;
 import com.whitebear.digitalfarmbackend.service.ManualReportService;
 
 @Service

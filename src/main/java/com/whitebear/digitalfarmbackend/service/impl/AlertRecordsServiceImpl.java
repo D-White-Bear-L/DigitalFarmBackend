@@ -2,7 +2,7 @@ package com.whitebear.digitalfarmbackend.service.impl;
 
 import com.whitebear.digitalfarmbackend.mapper.AlertRecordsMapper;
 import com.whitebear.digitalfarmbackend.mapper.FarmBaseMapper;
-import com.whitebear.digitalfarmbackend.model.dto.PageResult;
+import com.whitebear.digitalfarmbackend.model.vo.PageResult;
 import com.whitebear.digitalfarmbackend.model.entity.AlertRecords;
 import com.whitebear.digitalfarmbackend.model.entity.FarmBase;
 import com.whitebear.digitalfarmbackend.service.AlertRecordsService;

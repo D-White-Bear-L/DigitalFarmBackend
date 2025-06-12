@@ -1,6 +1,6 @@
 package com.whitebear.digitalfarmbackend.controller;
 
-import com.whitebear.digitalfarmbackend.model.dto.PageResult;
+import com.whitebear.digitalfarmbackend.model.vo.PageResult;
 import com.whitebear.digitalfarmbackend.model.dto.SoilQualityEvaluationDTO;
 import com.whitebear.digitalfarmbackend.service.SoilQualityEvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,13 +9,14 @@ import com.whitebear.digitalfarmbackend.model.entity.User;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    @Select("SELECT * FROM User WHERE (username = #{account} OR phone = #{account}) AND password = #{password} AND status = 'active'")
+    // For Register and Login
+    @Select("SELECT * FROM user WHERE (username = #{account} OR phone = #{account}) AND password = #{password} AND status = 'active'")
     User findByAccountAndPassword(String account, String password);
 
-    @Select("SELECT COUNT(*) FROM User WHERE username = #{username}")
+    @Select("SELECT COUNT(*) FROM user WHERE username = #{username}")
     int checkUsernameExists(String username);
 
-    @Select("SELECT COUNT(*) FROM User WHERE email = #{email}")
+    @Select("SELECT COUNT(*) FROM user WHERE email = #{email}")
     int checkEmailExists(String email);
 
     @Select("SELECT * FROM user WHERE username = #{account} OR email = #{account} LIMIT 1")

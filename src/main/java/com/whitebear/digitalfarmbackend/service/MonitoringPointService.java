@@ -1,6 +1,6 @@
 package com.whitebear.digitalfarmbackend.service;
 
-import com.whitebear.digitalfarmbackend.model.dto.PageResult;
+import com.whitebear.digitalfarmbackend.model.vo.PageResult;
 import com.whitebear.digitalfarmbackend.model.dto.MonitoringPointDTO;
 
 import java.util.List;

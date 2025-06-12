@@ -1,6 +1,6 @@
 package com.whitebear.digitalfarmbackend.controller;
 
-import com.whitebear.digitalfarmbackend.model.dto.PageResult;
+import com.whitebear.digitalfarmbackend.model.vo.PageResult;
 import com.whitebear.digitalfarmbackend.model.entity.AlertRecords;
 import com.whitebear.digitalfarmbackend.service.AlertRecordsService;
 import org.springframework.beans.factory.annotation.Autowired;

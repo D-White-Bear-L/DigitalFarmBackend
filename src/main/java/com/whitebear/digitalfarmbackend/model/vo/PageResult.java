@@ -1,4 +1,4 @@
-package com.whitebear.digitalfarmbackend.model.dto;
+package com.whitebear.digitalfarmbackend.model.vo;
 
 import lombok.Data;
 

@@ -1,7 +1,7 @@
 package com.whitebear.digitalfarmbackend.service.impl;
 
 import com.whitebear.digitalfarmbackend.mapper.SoilQualityEvaluationMapper;
-import com.whitebear.digitalfarmbackend.model.dto.PageResult;
+import com.whitebear.digitalfarmbackend.model.vo.PageResult;
 import com.whitebear.digitalfarmbackend.model.dto.SoilQualityEvaluationDTO;
 import com.whitebear.digitalfarmbackend.service.SoilQualityEvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class SoilQualityEvaluationImpl implements SoilQualityEvaluationService {
+public class SoilQualityEvaluationServiceImpl implements SoilQualityEvaluationService {
 
     @Autowired
     private SoilQualityEvaluationMapper soilQualityEvaluationMapper;

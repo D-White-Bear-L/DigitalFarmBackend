@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.whitebear.digitalfarmbackend.mapper.FarmBaseMapper;
 import com.whitebear.digitalfarmbackend.mapper.MonitoringPointMapper;
-import com.whitebear.digitalfarmbackend.model.dto.PageResult;
+import com.whitebear.digitalfarmbackend.model.vo.PageResult;
 import com.whitebear.digitalfarmbackend.model.dto.MonitoringPointDTO;
 import com.whitebear.digitalfarmbackend.model.entity.FarmBase;
 import com.whitebear.digitalfarmbackend.model.entity.MonitoringPoint;
