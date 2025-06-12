@@ -23,7 +23,7 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
     private DataAnalysisMapper dataAnalysisMapper;
 
     @Override
-    public Map<String, Object> getSoilTrendAnalysis(Integer baseId, Integer pointId, String startDate, String endDate) {
+    public Map<String, Object> getSoilTrendAnalysis(Integer baseId, Integer pointId, String startDate, String endDate, String paramName) {
         QueryWrapper<SoilSampleFull> queryWrapper = new QueryWrapper<>();
         if (baseId != null) {
             queryWrapper.eq("base_id", baseId);
@@ -43,14 +43,34 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
                 .map(sample -> sample.getSampleDate().format(DateTimeFormatter.ISO_DATE))
                 .collect(Collectors.toList()));
         
-        // 基础指标数据
-        result.put("ph", samples.stream().map(SoilSampleFull::getPh).collect(Collectors.toList()));
-        result.put("organicMatter", samples.stream().map(SoilSampleFull::getOrganicMatter).collect(Collectors.toList()));
-        result.put("waterContent", samples.stream().map(SoilSampleFull::getWaterContent).collect(Collectors.toList()));
-        result.put("availableP", samples.stream().map(SoilSampleFull::getAvailableP).collect(Collectors.toList()));
-        result.put("availableK", samples.stream().map(SoilSampleFull::getAvailableK).collect(Collectors.toList()));
-        result.put("availableN", samples.stream().map(SoilSampleFull::getAvailableN).collect(Collectors.toList()));
-        result.put("conductivity", samples.stream().map(SoilSampleFull::getConductivity).collect(Collectors.toList()));
+        // 根据 paramName 动态获取数据
+        List<BigDecimal> values = new ArrayList<>();
+        for (SoilSampleFull sample : samples) {
+            BigDecimal value = null;
+            switch (paramName) {
+                case "ph": value = sample.getPh(); break;
+                case "organicMatter": value = sample.getOrganicMatter(); break;
+                case "waterContent": value = sample.getWaterContent(); break;
+                case "availableP": value = sample.getAvailableP(); break;
+                case "availableK": value = sample.getAvailableK(); break;
+                case "availableN": value = sample.getAvailableN(); break;
+                case "conductivity": value = sample.getConductivity(); break;
+                case "si": value = sample.getSiValue(); break;
+                case "s": value = sample.getSValue(); break;
+                case "b": value = sample.getBValue(); break;
+                case "mo": value = sample.getMoValue(); break;
+                case "cl": value = sample.getClValue(); break;
+                case "ca": value = sample.getCaValue(); break;
+                case "mg": value = sample.getMgValue(); break;
+                case "zn": value = sample.getZnValue(); break;
+                case "cu": value = sample.getCuValue(); break;
+                case "mn": value = sample.getMnValue(); break;
+                case "fe": value = sample.getFeValue(); break;
+                default: break;
+            }
+            values.add(value);
+        }
+        result.put(paramName, values);
 
         return result;
     }
@@ -102,9 +122,12 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
         Map<String, Object> result = new HashMap<>();
         if (latestSample != null) {
             // 计算土壤质量评分
-            double qualityScore = calculateSoilQualityScore(latestSample);
-            result.put("qualityScore", qualityScore);
-            result.put("qualityLevel", getQualityLevel(qualityScore));
+            double originalQualityScore = calculateSoilQualityScore(latestSample);
+            double percentageQualityScore = Math.min(100.0, (originalQualityScore / 90.0) * 100.0);
+
+            result.put("originalQualityScore", originalQualityScore);
+            result.put("qualityScore", percentageQualityScore); // qualityScore now represents percentage
+            result.put("qualityLevel", getQualityLevel(originalQualityScore)); // Level based on original score
             result.put("recommendations", generateRecommendations(latestSample));
         }
         

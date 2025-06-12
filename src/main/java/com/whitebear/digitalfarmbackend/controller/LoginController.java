@@ -44,8 +44,8 @@ public class LoginController {
         try {
             User user = userService.login(loginDTO.getUsername(), loginDTO.getPassword());
             if (user != null) {
-                String token = JwtUtil.generateToken(user.getUsername());
-                String ip = ipUtil.getClientIp();
+                String token = JwtUtil.generateToken(user.getUsername()); // 生成token
+                String ip = ipUtil.getClientIp(); //  获取客户端IP
                 user.setLoginIp(ip);
                 Map<String, Object> result = new HashMap<>();
                 result.put("token", token);

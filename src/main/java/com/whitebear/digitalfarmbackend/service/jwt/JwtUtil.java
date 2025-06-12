@@ -15,11 +15,11 @@ public class JwtUtil {
 
     public static String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+                .setSubject(username) //  用户名
+                .setIssuedAt(new Date()) //  当前时间
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION)) //  过期时间
+                .signWith(key, SignatureAlgorithm.HS256) // 签名算法和密钥
+                .compact(); //  生成token
     }
 
     public static String getUsernameFromToken(String token) {
