@@ -1,13 +1,16 @@
 package com.whitebear.digitalfarmbackend.service.impl;
 
-import com.whitebear.digitalfarmbackend.mapper.UserMapper;
-import com.whitebear.digitalfarmbackend.model.dto.RegisterDTO;
-import com.whitebear.digitalfarmbackend.model.entity.User;
-import com.whitebear.digitalfarmbackend.service.UserService;
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.whitebear.digitalfarmbackend.mapper.UserMapper;
+import com.whitebear.digitalfarmbackend.model.dto.RegisterDTO;
+import com.whitebear.digitalfarmbackend.model.entity.User;
+import com.whitebear.digitalfarmbackend.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -51,7 +54,10 @@ public class UserServiceImpl implements UserService {
         // 1. 先查找用户
         User user = userMapper.findByAccount(account);
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            // 2. 校验通过，清除密码后返回
+            // 2. 更新最后登录时间
+            user.setLastLogin(LocalDateTime.now());
+            userMapper.updateById(user);
+            // 3. 校验通过，清除密码后返回
             user.setPassword(null);
             return user;
         }
