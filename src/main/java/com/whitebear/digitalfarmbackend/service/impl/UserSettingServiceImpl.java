@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,9 @@ public class UserSettingServiceImpl implements UserSettingService {
     
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
     
     @Value("${file.upload.path}")
     private String uploadPath;
@@ -57,13 +61,21 @@ public class UserSettingServiceImpl implements UserSettingService {
     @Override
     public boolean changePassword(Long userId, String oldPassword, String newPassword) {
         User user = userMapper.selectById(userId);
-        if (user == null || !user.getPassword().equals(oldPassword)) {
+        if (user == null) {
+            System.out.println("User not found for userId: " + userId);
             return false;
         }
         
-        user.setPassword(newPassword);
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            System.out.println("Old password does not match for userId: " + userId);
+            return false;
+        }
+        
+        user.setPassword(passwordEncoder.encode(newPassword));//  Update the password
         user.setPasswordUpdatedAt(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
+        
+        System.out.println("Updating password for userId: " + userId + ", new password hash: " + user.getPassword());
         return userMapper.updateById(user) > 0;
     }
 

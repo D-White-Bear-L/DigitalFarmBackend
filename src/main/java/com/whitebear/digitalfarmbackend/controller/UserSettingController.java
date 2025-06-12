@@ -52,6 +52,7 @@ public class UserSettingController {
 
     @PostMapping("/changePassword")
     public ResponseResult<Void> changePassword(@RequestBody UserDTO userDTO) {
+        System.out.println("Received UserDTO for changePassword: " + userDTO);
         boolean success = userSettingService.changePassword(userDTO.getUserId(), userDTO.getOldPassword(), userDTO.getNewPassword());
         if (success) {
             return ResponseResult.success();
